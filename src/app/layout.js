@@ -1,13 +1,15 @@
 import localFont from "next/font/local";
 import "./globals.css";
 
+// Use leading slashes to reference fonts in the public directory
 const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
+  src: "../fonts/GeistVF.woff", // Correct path for font file
   variable: "--font-geist-sans",
   weight: "100 900",
 });
+
 const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
+  src: "../fonts/GeistMonoVF.woff", // Correct path for font file
   variable: "--font-geist-mono",
   weight: "100 900",
 });
