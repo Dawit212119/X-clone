@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className="flex justify-between max-w-6xl mx-auto">
-          <div>
+          <div className="hidden sm:inline border-r">
             <Sidebar />
           </div>
           <div>{children}</div>
