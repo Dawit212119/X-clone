@@ -2,6 +2,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Sidebar from "../components/Sidebar";
 import News from "../components/News";
+import SessionWrapper from "@/components/SessionWrapper";
 
 // Use leading slashes to reference fonts in the public directory
 const geistSans = localFont({
@@ -23,27 +24,29 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div className="flex justify-between max-w-6xl mx-auto">
-          <div className="hidden sm:inline border-r">
-            <Sidebar />
-          </div>
-          <div>{children}</div>
-          <div className="lg:flex-col h-screen border-l p-3 hidden lg:flex w-[24rem]">
-            <div className="py-2 sticky top-0 w-full">
-              <input
-                type="text"
-                placeholder="Search"
-                className="bg-gray-100  sm:w-full   border text-sm px-4 py-2 border-gray-200 focus:outline-none rounded-3xl w-full "
-              />
+    <SessionWrapper>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <div className="flex justify-between max-w-6xl mx-auto">
+            <div className="hidden sm:inline border-r">
+              <Sidebar />
             </div>
-            <News />
+            <div>{children}</div>
+            <div className="lg:flex-col h-screen border-l p-3 hidden lg:flex w-[24rem]">
+              <div className="py-2 sticky top-0 w-full">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="bg-gray-100  sm:w-full   border text-sm px-4 py-2 border-gray-200 focus:outline-none rounded-3xl w-full "
+                />
+              </div>
+              <News />
+            </div>
           </div>
-        </div>
-      </body>
-    </html>
+        </body>
+      </html>
+    </SessionWrapper>
   );
 }
