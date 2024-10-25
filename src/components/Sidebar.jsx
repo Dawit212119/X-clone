@@ -10,13 +10,13 @@ export default function Sidebar() {
   const { data: session } = useSession();
   console.log(session);
   return (
-    <div className="flex flex-col gap-4 p-3 h-screen justify-between">
+    <div className="flex flex-col gap-6 p-3 h-screen justify-between">
       <div>
         <Link href="/">
           <FaXTwitter
             className="w-16 h-16 cursor-pointer
          p-3 hover:bg-gray-100 rounded-full
-         transtion-all duration-200 "
+         transtion-all mb-4 duration-200 "
           />
         </Link>
         <Link
@@ -25,20 +25,20 @@ export default function Sidebar() {
         transtion-all duration-200 w-fit"
         >
           <HiHome className="w-7 h-7 " />
-          <span className="font-bold hidden sm:inline">Home</span>
+          <span className="font-bold hidden  sm:inline">Home</span>
         </Link>
 
         {!session ? (
           <button
             onClick={() => signIn()}
-            className="bg-blue-400 p-3 rounded-full w-48 text-white hover:brightness-95 shadow-md font-semibold hidden xl:inline"
+            className="bg-blue-400 p-3 rounded-full  w-48 text-white hover:brightness-95 shadow-md font-semibold hidden xl:inline"
           >
             Sign In
           </button>
         ) : (
           <button
             onClick={() => signOut()}
-            className="bg-blue-400 p-3 rounded-full w-48 text-white hover:brightness-95 shadow-md font-semibold hidden xl:inline"
+            className="bg-blue-400 p-3 mt-5 rounded-full w-48 text-white hover:brightness-95 shadow-md font-semibold hidden xl:inline"
           >
             Sign out
           </button>

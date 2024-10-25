@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
             <div className="hidden sm:inline border-r">
               <Sidebar />
             </div>
-            <div>{children}</div>
+            <div className="w-6xl flex-1">{children}</div>
             <div className="lg:flex-col h-screen border-l p-3 hidden lg:flex w-[24rem]">
               <div className="py-2 sticky top-0 w-full">
                 <input
