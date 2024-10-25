@@ -1,12 +1,66 @@
 "use client";
 
+import { app } from "@/firebase";
 import { useSession } from "next-auth/react";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { HiOutlinePhotograph } from "react-icons/hi";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 
 export default function Input() {
   const { data: session } = useSession();
-  const ref = useRef();
+  const [fileselected, setfileselected] = useState(null);
+  const [imageurl, setimageurl] = useState(null);
+  const [ImageFileUploading, setImageFileUploading] = useState(false);
+  const imageref = useRef();
+  console.log(fileselected);
+  console.log(imageurl);
+
+  const imagehandle = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setfileselected(file);
+      setimageurl(URL.createObjectURL(file));
+    }
+  };
+
+  useEffect(() => {
+    if (fileselected) {
+      uploadimagetofb();
+    }
+  }, [fileselected]);
+
+  const uploadimagetofb = () => {
+    setImageFileUploading(true);
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + "-" + fileselected.name;
+    const storegeRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storegeRef, fileselected);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+      },
+      (error) => {
+        console.log(error);
+        setImageFileUploading(false);
+        setimageurl(null);
+        setfileselected(null);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setimageurl(downloadURL);
+          setImageFileUploading(false);
+        });
+      }
+    );
+  };
   return (
     <>
       {session && (
@@ -19,8 +73,25 @@ export default function Input() {
               className="text-xl  min-h-[50px] tracking-wide mb-6 border-none text-gray-600 font-semibold w-full focus:outline-none"
               placeholder="whats happing?"
             />
+            {fileselected && (
+              <img
+                src={imageurl}
+                className="max-h-[200px] cursor-pointer rounded-xl"
+              />
+            )}
+            {ImageFileUploading && <p>Loading...</p>}
             <div className="flex item-center border-b border-gray-300 justify-between pt-5  ">
-              <HiOutlinePhotograph className="text-sky-500 h-10 w-10 cursor-pointer hover:bg-sky-100 rounded-full p-2" />
+              <HiOutlinePhotograph
+                onClick={() => imageref.current.click()}
+                className="text-sky-500 h-10 w-10 cursor-pointer hover:bg-sky-100 rounded-full p-2"
+              />
+              <input
+                type="file"
+                ref={imageref}
+                onChange={imagehandle}
+                accept="image/*"
+                hidden
+              />
               <button className="bg-blue-400 ml-10 border-b  rounded-full px-4 text-white py-1.5 w-[100px] hover:brightness-95 transition duration-200">
                 Post
               </button>
