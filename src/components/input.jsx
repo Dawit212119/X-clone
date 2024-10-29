@@ -5,6 +5,15 @@ import { useSession } from "next-auth/react";
 import React, { useEffect, useRef, useState } from "react";
 import { HiOutlinePhotograph } from "react-icons/hi";
 import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  serverTimestamp,
+} from "firebase/firestore";
+import { db } from "../firebase";
+import {
   getStorage,
   ref,
   uploadBytesResumable,
@@ -13,13 +22,12 @@ import {
 
 export default function Input() {
   const { data: session } = useSession();
+  const [postLoading, setPostLoading] = useState(false);
   const [fileselected, setfileselected] = useState(null);
   const [imageurl, setimageurl] = useState(null);
+  const [text, settext] = useState("");
   const [ImageFileUploading, setImageFileUploading] = useState(false);
   const imageref = useRef();
-  console.log(fileselected);
-  console.log(imageurl);
-
   const imagehandle = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -33,6 +41,29 @@ export default function Input() {
       uploadimagetofb();
     }
   }, [fileselected]);
+
+  const handleSubmit = async () => {
+    setPostLoading(true);
+    try {
+      const post = await addDoc(collection(db, "posts"), {
+        uid: session.user.id,
+        image: imageurl,
+        profileImage: session.user.image,
+        text,
+        name: session.user.name,
+        username: session.user.username,
+        createdAt: serverTimestamp(),
+      });
+      console.log(post.id);
+      setPostLoading(false);
+      setimageurl(null);
+      setImageFileUploading(false);
+      settext("");
+      setfileselected(null);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const uploadimagetofb = () => {
     setImageFileUploading(true);
@@ -72,11 +103,15 @@ export default function Input() {
               type="text"
               className="text-xl  min-h-[50px] tracking-wide mb-6 border-none text-gray-600 font-semibold w-full focus:outline-none"
               placeholder="whats happing?"
+              value={text}
+              onChange={(e) => settext(e.target.value)}
             />
             {fileselected && (
               <img
                 src={imageurl}
-                className="max-h-[200px] cursor-pointer rounded-xl"
+                className={`max-h-[200px] cursor-pointer rounded-xl ${
+                  ImageFileUploading ? "animate-pulse" : ""
+                }`}
               />
             )}
             {ImageFileUploading && <p>Loading...</p>}
@@ -92,7 +127,13 @@ export default function Input() {
                 accept="image/*"
                 hidden
               />
-              <button className="bg-blue-400 ml-10 border-b  rounded-full px-4 text-white py-1.5 w-[100px] hover:brightness-95 transition duration-200">
+              <button
+                disabled={
+                  text.trim() === "" || postLoading || ImageFileUploading
+                }
+                onClick={handleSubmit}
+                className="bg-blue-400 ml-10 border-b  rounded-full px-4 text-white py-1.5 w-[100px] cursor-pointer hover:brightness-95 transition duration-200"
+              >
                 Post
               </button>
             </div>
