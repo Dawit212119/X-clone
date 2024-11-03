@@ -49,7 +49,7 @@ export default function Sidebar() {
         <div
           className="flex text-gray-700 items-center gap-2 hover:bg-gray-100
         transtion duration-200 cursor-pointer
-         p-3 mt-auto rounded-full xl:mr-3"
+         p-3 mt-auto rounded-full xl:mr-3 sticky"
         >
           <img
             src={session.user.image}

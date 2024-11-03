@@ -1,3 +1,4 @@
+import Feed from "@/components/Feed";
 import Input from "@/components/input";
 import React from "react";
 
@@ -10,6 +11,7 @@ export default function page() {
         </h1>
       </div>
       <Input />
+      <Feed />
     </div>
   );
 }

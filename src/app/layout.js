@@ -30,12 +30,12 @@ export default function RootLayout({ children }) {
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <div className="flex justify-between max-w-6xl mx-auto">
-            <div className="hidden sm:inline border-r">
+            <div className="hidden sm:inline border-r h-screen overflow-hidden sticky top-0">
               <Sidebar />
             </div>
-            <div className="w-6xl flex-1">{children}</div>
-            <div className="lg:flex-col h-screen border-l p-3 hidden lg:flex w-[24rem]">
-              <div className="py-2 sticky top-0 w-full">
+            <div className="w-6xl flex-1 overflow-y-scroll">{children}</div>
+            <div className="lg:flex-col  sticky overflow-y-auto top-0 h-screen border-l p-3 hidden lg:flex w-[24rem]">
+              <div className="py-2  w-full">
                 <input
                   type="text"
                   placeholder="Search"
